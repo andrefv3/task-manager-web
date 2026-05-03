@@ -1,29 +1,35 @@
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './AuthProvider';
-// import { QueryClientProvider } from '@tanstack/react-query'; // Si usas React Query
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 interface MainProviderProps {
   children: React.ReactNode;
 }
 
 export const MainProvider = ({ children }: MainProviderProps) => {
-  return (
-    /* 1. Data Provider (opcional pero recomendado) */
-    /* <QueryClientProvider client={queryClient}> */
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        // Global configurations
+        retry: 1,
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
 
-    /* Authentication Provider */
-    <AuthProvider>
-        <Toaster 
-            position="top-right" 
-            toastOptions={{
-            className: 'react-hot-toast-custom',
-            duration: 3000,
-            }} 
-        />
-        
-        {children}
-    </AuthProvider>
-      
-    /* </QueryClientProvider> */
+  return (
+    /* Data Provider  */
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+          <Toaster 
+              position="top-right" 
+              toastOptions={{
+              className: 'react-hot-toast-custom',
+              duration: 3000,
+              }} 
+          />
+          
+          {children}
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };

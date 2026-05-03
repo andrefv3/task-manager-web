@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
-export default function LoginPage() {
+export const LoginPage = () => {
   // 1. Just one call to the facade hook (useAuth)
   const { login } = useAuth();
   
@@ -20,10 +20,10 @@ export default function LoginPage() {
     try {
       // We send the credentials object (based on our previous useAuth)
       await login({ email, password });
-      toast.success('¡Bienvenido de nuevo!');
+      toast.success('Welcome Back!');
     } catch (err: any) {
       // Managing errors professionally
-      const message = err.response?.data?.message || 'Credenciales incorrectas';
+      const message = err.response?.data?.message || 'Invalid credentials';
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -34,7 +34,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 bg-[#0a0a0a]">
       <div className="w-full max-w-md">
 
-        {/* Header - Branding consistente */}
+        {/* Header - Branding Consistent */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 border border-(--accent-border) bg-(--accent-bg)">
             <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-(--accent)">
@@ -46,7 +46,7 @@ export default function LoginPage() {
           <p className="text-sm mt-1 text-gray-500">Sign in to your account</p>
         </div>
 
-        {/* Form - Controlado y tipado */}
+        {/* Form - Control & Typing */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <label className="block text-sm font-medium text-gray-300">

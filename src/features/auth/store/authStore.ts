@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { User } from '@/shared/types';
-
 interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  isInitialLoading: boolean; 
   actions: {
     login: (user: User, token: string) => void;
     logout: () => void;
-    checkAuth: () => Promise<void>; // AuthProvider's checkAuth function
+    checkAuth: () => Promise<void>;
   };
 }
 
@@ -19,28 +19,31 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
+      isInitialLoading: true, 
 
       actions: {
         login: (user, token) => {
-          set({ user, token, isAuthenticated: true });
+          set({ user, token, isAuthenticated: true, isInitialLoading: false });
         },
 
         logout: () => {
-          set({ user: null, token: null, isAuthenticated: false });
-          // El middleware 'persist' limpiará el storage automáticamente
+          set({ user: null, token: null, isAuthenticated: false, isInitialLoading: false });
+          useAuthStore.persist.clearStorage();
+          localStorage.clear();
         },
 
         checkAuth: async () => {
           const { token } = get();
+          
           if (!token) {
-            get().actions.logout();
+            set({ isAuthenticated: false, isInitialLoading: false });
             return;
           }
           
           try {
-            // Aquí podrías hacer una llamada al API para validar el token
-            // const user = await userService.getMe();
-            // set({ user, isAuthenticated: true });
+            // Simulation of an API call to validate the token and fetch user data
+            // const user = await authService.getMe(); 
+            set({ isAuthenticated: true, isInitialLoading: false });
           } catch (error) {
             get().actions.logout();
           }
@@ -48,17 +51,14 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-storage', // Nombre de la key en localStorage
+      name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
-      // Solo persistimos el usuario y el token, no las acciones
       partialize: (state) => ({ 
-        user: state.user, 
-        token: state.token, 
-        isAuthenticated: state.isAuthenticated 
+        token: state.token,
+        user: state.user 
       }),
     }
   )
 );
 
-// Helper Hook para acceso rápido a acciones (Patrón de optimización)
 export const useAuthActions = () => useAuthStore((s) => s.actions);

@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // if the app is still checking the token, we show a full-screen loader
   // This prevents flashing of protected routes for a split second before redirecting to login if the token is invalid or missing.
   if (isInitializing) {
-    return <div className="full-screen-loader">Cargando aplicación...</div>;
+    return <div className="full-screen-loader">Loading Application...</div>;
   }
 
   return <>{children}</>;

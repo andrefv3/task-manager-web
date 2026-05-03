@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import api from '@/shared/lib/api/axios';
-import type { AuthResponse, LoginCredentials, RegisterCredentials } from '@/shared/types';
+import type { LoginCredentials, RegisterCredentials } from '@/shared/types';
 import { authService } from '../api/auth.service';
 
 export const useAuth = () => {
@@ -29,7 +28,7 @@ export const useAuth = () => {
 
   const handleRegister = async (credentials: RegisterCredentials) => {
     try {
-      const { data } = await api.post<AuthResponse>('/auth/register', credentials);
+      const data = await authService.register(credentials);
       login(data.user, data.access_token);
       navigate('/', { replace: true });
     } catch (error) {

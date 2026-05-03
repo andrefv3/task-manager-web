@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 
-export default function RegisterPage() {
+export const RegisterPage = () => {
   // We extract 'register' (which internally uses the service and the store)
   const { register } = useAuth();
   
   // local state for form data and submission status
   const [formData, setFormData] = useState({
     name: '',
+    lastName: '',
     email: '',
     password: '',
   });
@@ -32,9 +33,9 @@ export default function RegisterPage() {
     try {
       // We send the whole formData object, which matches our expected RegisterCredentials type
       await register(formData);
-      toast.success('¡Cuenta creada con éxito!');
+      toast.success('Account Created Successfully!');
     } catch (err: any) {
-      const message = err.response?.data?.message || 'Error al crear la cuenta';
+      const message = err.response?.data?.message || 'Error creating account';
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -70,6 +71,20 @@ export default function RegisterPage() {
               required
               disabled={isSubmitting}
               placeholder="Andrés Vega"
+              className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all bg-[#111827] border border-[#1f2937] text-[#f9fafb] focus:border-(--accent-border) disabled:opacity-50"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-gray-300">Last name</label>
+            <input
+              name="lastName"
+              type="text"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+              placeholder="Vega"
               className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all bg-[#111827] border border-[#1f2937] text-[#f9fafb] focus:border-(--accent-border) disabled:opacity-50"
             />
           </div>
