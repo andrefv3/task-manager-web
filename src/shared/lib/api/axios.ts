@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '@/features/auth/store/authStore'; 
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -7,23 +8,26 @@ const api = axios.create({
   },
 });
 
+// Interceptor of Request: Inject Token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  // Instead of localStorage, we use the Store state (Source of truth)
+  const token = useAuthStore.getState().token;
+  
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
+// Interceptor of Response: Global Error Handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // if the backend return 401 (Unauthorized), we cleaned and redirect to login
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      // We use the logout action from your Store to clear ALL state
+      // This is better than manually clearing localStorage
+      useAuthStore.getState().actions.logout();
       
-      // Only redirect if we're not already on the login page
       if (!window.location.pathname.includes('/login')) {
         window.location.href = '/login';
       }
