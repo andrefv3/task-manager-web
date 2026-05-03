@@ -1,12 +1,11 @@
-// app/routes.tsx
-import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedGuard, PublicGuard } from './RouteGuards';
+import { lazyImport } from '@/shared/utils/LazyImport';
 
 // Pages
-const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'));
-const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'));
-const DashboardPage = lazy(() => import('@/features/tasks/pages/DashboardPage'));
+const LoginPage = lazyImport(() => import('@/features/auth/pages/LoginPage'), 'LoginPage');
+const RegisterPage = lazyImport(() => import('@/features/auth/pages/RegisterPage'), 'RegisterPage');
+const DashboardPage = lazyImport(() => import('@/features/tasks/pages/DashboardPage'), 'DashboardPage');
 
 export const router = createBrowserRouter([
   {
