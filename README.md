@@ -1,11 +1,10 @@
 <p align="center">
-  <img src="./public/favicon.svg" width="140"/>
+  <img src="./public/assets/logo-kynetic.svg" width="160" alt="Kynetic Logo" />
 </p>
 
-<h1 align="center">Task Manager — Frontend</h1>
-
+<h1 align="center">Kynetic</h1>
 <p align="center">
-  A modern task management interface built with React, designed for performance, scalability, and a clean user experience.
+  <strong>The Intelligence Layer for High-Velocity Execution</strong>
 </p>
 
 <p align="center">
@@ -14,32 +13,42 @@
   <img src="https://img.shields.io/badge/Vitest-testing-6E9F18?style=flat-square" />
 </p>
 
+<p align="center">
+  Kynetic is not just a task manager; it's a <strong>priority engine</strong>. 
+  By synthesizing <i>Impact vs. Effort</i> metrics through a proprietary scoring algorithm, 
+  Kynetic eliminates decision fatigue and focuses your cognitive load where it matters most.
+</p>
+
 ---
 
 ## Overview
 
-Task Manager provides a streamlined environment for organizing and tracking tasks efficiently. The application prioritizes clarity, responsiveness, and predictable behavior, ensuring a consistent experience across different usage scenarios.
+Kynetic provides a streamlined environment for organizing and tracking tasks efficiently. The application prioritizes clarity, responsiveness, and predictable behavior, ensuring a consistent experience across different usage scenarios.
 
 The codebase is structured to support long-term evolution, making it easy to extend features, refactor components, and maintain high development velocity.
 
 ---
 
-## Engineering Principles
+## 🏗️ Architecture & Engineering
 
-- **Clarity over complexity** — readable, predictable code as a baseline  
-- **Scalable structure** — architecture designed for growth  
-- **Separation of concerns** — UI, logic, and data handling clearly isolated  
-- **Test-driven mindset** — reliability enforced through unit testing  
-- **Performance awareness** — efficient rendering and state updates  
+Designed with a **domain-driven approach**, the codebase prioritizes modularity and predictable state transitions.
+
+### Engineering Principles
+-   **Atomic Design Implementation** — Reusable, testable UI components.
+-   **Static Type Safety** — End-to-end type integrity with TypeScript.
+-   **Asynchronous Excellence** — Optimized data fetching with React Query.
+-   **Zero-Lag UI** — Optimistic updates for a fluid, "local-first" feel.
 
 ---
 
-## Technology Stack
+## 🛠️ Technology Stack
 
-- **React** — component-driven UI architecture  
-- **TypeScript** — static typing for robustness and maintainability  
-- **Vitest** — fast and lightweight testing framework  
-
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | React 19 (Concurrent Mode), Tailwind CSS |
+| **State** | Zustand (Store Sharding), React Query v5 |
+| **Backend** | NestJS, Prisma ORM, PostgreSQL |
+| **Quality** | Vitest, Testing Library, ESLint (Strict) |
 ---
 
 ## Features
@@ -52,11 +61,11 @@ The codebase is structured to support long-term evolution, making it easy to ext
 
 ---
 
-## Requirements
+## 🚀 Getting Started
 
-- Node.js v25+  
-- npm v11+  
-- Compatible with modern browsers
+### Prerequisites
+- **Node.js** v25+ (Latest features)
+- **pnpm** or **npm** v11+
 
 ---
 
@@ -70,13 +79,22 @@ npm run dev
 ## Testing
 
 ```bash
-npm run test
+npm run test        # Unit & Integration
+npm run test:ui     # Visual Test Runner
 ```
+---
 
-## Design Approach
+## 🎨 Design Approach
 
 The interface is designed to be minimal yet functional, avoiding unnecessary complexity while maintaining flexibility. Each component is built to be composable, reusable, and easy to reason about, supporting long-term maintainability.
 
+---
+
+## 🔮 Roadmap: The Evolution to Autonomous Flow
+
+- [ ] **Kynetic AI Integration**: Natural Language Processing for automatic task scoring.
+- [ ] **Predictive Scheduling**: Machine learning to suggest focus blocks based on historical velocity.
+- [ ] **WebSockets Sync**: Real-time collaborative "war rooms" for team-level execution.
 ---
 
 ## Future Direction

@@ -34,11 +34,8 @@ export const Sidebar = () => {
   return (
     <aside className="flex flex-col h-full bg-white px-6 pb-6 ">
       {/* Logo Area */}
-      <div className="flex h-20 shrink-0 items-center gap-3">
-        <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white shadow-sm">
-          <CheckSquare size={18} strokeWidth={3} />
-        </div>
-        <span className="text-xl font-black tracking-tight text-slate-900">Task Manager</span>
+      <div className="flex mt-3 h-20 shrink-0 items-center gap-3">
+        <img className="w-auto h-10 max-w-36" src="/assets/Kynetic-logo-name.svg" alt="Kynetic Logo" draggable={false} />
       </div>
       
       <div className="mb-8">
