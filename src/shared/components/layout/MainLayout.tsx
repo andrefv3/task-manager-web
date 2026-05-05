@@ -1,5 +1,5 @@
 import { MobileNav } from './MobileNav';
-import { Sidebar } from './Sidebar';
+import { Sidebar } from './Sidebar/Sidebar';
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (

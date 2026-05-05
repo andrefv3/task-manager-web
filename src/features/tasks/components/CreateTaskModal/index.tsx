@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTaskStore } from '../../store/useTaskStore';
-import { Slider } from '@/shared/components/ui/slider/Slider';
-import { Modal } from '@/shared/components/ui/Modal';
+import { Slider } from '@/shared/components/ui';
+import { Modal } from '@/shared/components/ui';
 import type { Priority } from '@/shared/types';
 
 export const CreateTaskModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
