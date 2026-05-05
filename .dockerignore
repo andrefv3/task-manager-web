@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and Build
 node_modules
 dist
 dist-ssr
@@ -14,7 +15,7 @@ dist-ssr
 coverage
 build
 
-# Editor directories and files
+# Editor directories and IDEs
 .idea
 .DS_Store
 *.suo
@@ -22,21 +23,19 @@ build
 *.njsproj
 *.sln
 *.sw?
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode
 
 # dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
 .env.local
 
-# temp directory
+# CI & Testing
+.github
+src/tests
+**/*.test.tsx
+**/*.test.ts
+
+# Temp
 .temp
 .tmp

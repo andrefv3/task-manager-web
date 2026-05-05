@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/features/auth/store/authStore';
+import { useAuthStore } from '@/features/auth';
 
 export const WelcomeMessage = () => {
   const user = useAuthStore((s) => s.user);
