@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export const LoginPage = () => {
   // 1. Just one call to the facade hook (useAuth)
@@ -21,10 +22,14 @@ export const LoginPage = () => {
       // We send the credentials object (based on our previous useAuth)
       await login({ email, password });
       toast.success('Welcome Back!');
-    } catch (err: any) {
-      // Managing errors professionally
-      const message = err.response?.data?.message || 'Invalid credentials';
-      toast.error(message);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const message = err.response?.data?.message || 'Invalid credentials';
+        toast.error(message);
+      } else {
+        // If it's not an Axios error (e.g. a code error)
+        toast.error('An unexpected error occurred');
+      }
     } finally {
       setIsSubmitting(false);
     }

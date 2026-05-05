@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 export const RegisterPage = () => {
   // We extract 'register' (which internally uses the service and the store)
@@ -34,9 +35,14 @@ export const RegisterPage = () => {
       // We send the whole formData object, which matches our expected RegisterCredentials type
       await register(formData);
       toast.success('Account Created Successfully!');
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Error creating account';
-      toast.error(message);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const message = err.response?.data?.message || 'Error creating account';
+        toast.error(message);
+      } else {
+        // If it's not an Axios error (e.g. a code error)
+        toast.error('An unexpected error occurred');
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -12,28 +12,19 @@ export const useAuth = () => {
   const { login, logout } = useAuthStore((s) => s.actions);
 
   const handleLogin = async (credentials: LoginCredentials) => {
-    try {
-      const data = await authService.login(credentials);
-      
-      // 1. Update the state with the logged-in user and token
-      login(data.user, data.access_token);
-      
-      // 2. Navigate to the dashboard
-      navigate('/', { replace: true });
-    } catch (error) {
-      // Or you could handle it here with a toast notification
-      throw error; 
-    }
+    const data = await authService.login(credentials);
+    
+    // 1. Update the state with the logged-in user and token
+    login(data.user, data.access_token);
+    
+    // 2. Navigate to the dashboard
+    navigate('/', { replace: true });
   };
 
   const handleRegister = async (credentials: RegisterCredentials) => {
-    try {
-      const data = await authService.register(credentials);
-      login(data.user, data.access_token);
-      navigate('/', { replace: true });
-    } catch (error) {
-      throw error;
-    }
+    const data = await authService.register(credentials);
+    login(data.user, data.access_token);
+    navigate('/', { replace: true });
   };
 
   const handleLogout = () => {
