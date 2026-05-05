@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '@/features/auth/store/authStore';
+import { useAuthStore } from '@/features/auth';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const checkAuth = useAuthStore((s) => s.actions.checkAuth); // A function that checks the token in localStorage/cookies

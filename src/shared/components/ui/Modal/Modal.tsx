@@ -55,7 +55,7 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
           <button 
             onClick={onClose}
             className="p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white transition-all"
-            aria-label="Cerrar modal"
+            aria-label="Close modal"
           >
             <X size={20} />
           </button>
