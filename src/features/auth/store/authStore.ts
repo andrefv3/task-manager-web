@@ -44,7 +44,7 @@ export const useAuthStore = create<AuthState>()(
             // Simulation of an API call to validate the token and fetch user data
             // const user = await authService.getMe(); 
             set({ isAuthenticated: true, isInitialLoading: false });
-          } catch (error) {
+          } catch {
             get().actions.logout();
           }
         },

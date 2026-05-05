@@ -20,4 +20,4 @@ export interface CreateTaskDto extends Pick<Task, 'title' | 'description' | 'pri
   status?: TaskStatus;
 }
 
-export interface UpdateTaskDto extends Partial<CreateTaskDto> {}
+export type UpdateTaskDto = Partial<CreateTaskDto>;
