@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/features/auth/store/authStore';
+import { useAuthStore } from '@/features/auth';
 import { WelcomeMessage } from './WelcomeMessage';
 
 export const DashboardHeader = () => {

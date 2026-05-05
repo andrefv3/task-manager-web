@@ -2,7 +2,7 @@ import { useTasks } from '../hooks/useTasksHook';
 import { DashboardHeader } from '../components/DashboardHeader';
 import { TaskSummaryCard } from '../components/ProgressStats/TaskSummaryCard';
 import { TaskList } from '../components/TaskList';
-import { MainLayout } from '@/shared/components/layout/MainLayout';
+import { MainLayout } from '@/shared/components/layout';
 
 export const DashboardPage = () => {
   // We consume the hook. React Query handles the loading state for us.
