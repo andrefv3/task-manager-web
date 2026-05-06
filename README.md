@@ -8,9 +8,19 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-19-20232A?style=flat-square&logo=react" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript" />
-  <img src="https://img.shields.io/badge/Vitest-testing-6E9F18?style=flat-square" />
+  <!-- Core Stack -->
+  <img src="https://img.shields.io/badge/React-19.2-20232A?style=flat-square&logo=react" />
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4.2-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" />
+  
+  <!-- Tools & Quality -->
+  <img src="https://img.shields.io/badge/Vite-8.0-646CFF?style=flat-square&logo=vite" />
+  <img src="https://img.shields.io/badge/Vitest-4.1-6E9F18?style=flat-square&logo=vitest" />
+  <img src="https://img.shields.io/badge/ESLint-9.3-4B32C3?style=flat-square&logo=eslint" />
+  
+  <!-- Infrastructure -->
+  <img src="https://img.shields.io/badge/Vercel-Deployment-000000?style=flat-square&logo=vercel" />
+  <img src="https://img.shields.io/badge/Docker-Infrastructure-2496ED?style=flat-square&logo=docker" />
 </p>
 
 <p align="center">
