@@ -1,106 +1,98 @@
-import { useState } from 'react';
+import { Button, Input } from '@/shared/components/ui';
+import { useLoginForm } from '../hooks/useLoginForm';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import toast from 'react-hot-toast';
-import axios from 'axios';
 
 export const LoginPage = () => {
-  // 1. Just one call to the facade hook (useAuth)
-  const { login } = useAuth();
-  
-  // 2. Local state for the form
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // 3. Submit handler
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    setIsSubmitting(true);
-    try {
-      // We send the credentials object (based on our previous useAuth)
-      await login({ email, password });
-      toast.success('Welcome Back!');
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        const message = err.response?.data?.message || 'Invalid credentials';
-        toast.error(message);
-      } else {
-        // If it's not an Axios error (e.g. a code error)
-        toast.error('An unexpected error occurred');
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { values, errors, isSubmitting, handleLogin, handleChange } = useLoginForm();
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[#0a0a0a]">
-      <div className="w-full max-w-md">
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-white overflow-hidden">
+      {/* Background Blobs - Mantenidos igual */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-5%] w-200 h-175 bg-purple-200/50 blur-[100px] opacity-70 animate-blob" style={{ borderRadius: '30% 70% 50% 50% / 30% 30% 70% 70%' }} />
+        <div className="absolute bottom-[-15%] right-[-5%] w-225 h-200 bg-blue-100/60 blur-[120px] opacity-70 animate-blob animation-delay-2000" style={{ borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' }} />
+        <div className="absolute top-[20%] right-[10%] w-125 h-125 bg-pink-100/40 blur-[110px] opacity-60 animate-blob animation-delay-4000" style={{ borderRadius: '50% 20% 80% 30% / 30% 60% 40% 70%' }} />
+      </div>
 
-        {/* Header - Branding Consistent */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 border border-(--accent-border) bg-(--accent-bg)">
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-(--accent)">
-              <path d="M9 11l3 3L22 4" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">Welcome back</h1>
-          <p className="text-sm mt-1 text-gray-500">Sign in to your account</p>
-        </div>
-
-        {/* Form - Control & Typing */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-gray-300">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isSubmitting}
-              placeholder="you@example.com"
-              className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all bg-[#111827] border border-[#1f2937] text-[#f9fafb] focus:border-(--accent-border) disabled:opacity-50"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-gray-300">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={isSubmitting}
-              placeholder="••••••••"
-              className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none transition-all bg-[#111827] border border-[#1f2937] text-[#f9fafb] focus:border-(--accent-border) disabled:opacity-50"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2.5 rounded-lg text-sm font-medium transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 bg-(--accent) text-white shadow-(--accent-bg)"
-          >
-            {isSubmitting ? 'Signing in...' : 'Sign in'}
-          </button>
-        </form>
-
-        {/* Footer */}
-        <p className="text-center text-sm mt-6 text-gray-500">
+      {/* Enlace Estratégico Arriba a la Derecha */}
+      <div className="absolute top-8 right-8 z-20 hidden md:block">
+        <p className="text-sm text-gray-500">
           Don't have an account?{' '}
-          <Link to="/register" className="font-medium text-(--accent) hover:underline">
+          <Link to="/register" className="font-bold text-gray-900 hover:text-blue-600 transition-colors ml-1">
             Sign up
           </Link>
         </p>
+      </div>
 
+      {/* Card */}
+      <div className="relative z-10 w-full max-w-100 p-10 rounded-[48px] bg-white/60 border border-white/80 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.04)] backdrop-blur-3xl text-center">
+        <img className='mx-auto w-16 h-16 rounded-2xl shadow-sm mb-6' src='/assets/logo-kynetic.svg' alt="Logo" />
+
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Sign in with email</h1>
+          <p className="text-gray-400 text-sm mt-2 px-4">Access your control panel and manage your tasks.</p>
+        </div>
+
+        <form onSubmit={handleLogin} className="text-left">
+          <div className="h-auto"> 
+            <Input
+              label='Email'
+              type="email"
+             value={values.email}
+              error={errors.email}
+              disabled={isSubmitting}
+              onChange={handleChange('email')}
+              placeholder="you@example.com"
+              className="h-auto rounded-xl border-gray-200 focus:border-purple-500 transition-all"
+            />
+          </div>
+
+          <div className="h-auto">
+            <Input 
+              label='Password'
+              type="password" 
+              value={values.password}
+              error={errors.password}
+              disabled={isSubmitting}
+              onChange={handleChange('password')}
+              className="h-auto rounded-xl border-gray-200 focus:border-purple-500 transition-all" 
+              placeholder="••••••••" 
+            />
+          </div>
+
+          <div className="text-right mb-6">
+            <button type="button" className="cursor-pointer text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors">
+              Forgot password?
+            </button>
+          </div>
+
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="cursor-pointer w-full h-12 bg-[#1c1c1c] hover:bg-black text-white rounded-2xl font-bold shadow-lg transition-all active:scale-95"
+          >
+            {isSubmitting ? 'Iniciando...' : 'Get Started'}
+          </Button>
+
+          <div className="relative flex items-center py-6">
+            <div className="grow border-t border-gray-100"></div>
+            <span className="shrink mx-4 text-gray-300 text-[10px] font-bold uppercase tracking-widest">Or sign in with</span>
+            <div className="grow border-t border-gray-100"></div>
+          </div>
+
+          <div className="flex justify-center gap-8">
+            <button type="button" className="cursor-pointer hover:scale-110 transition-transform">
+              <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" className="w-6 h-6" alt="Google" />
+            </button>
+          </div>
+
+          {/* Mobile Version */}
+          <p className="text-center text-sm text-gray-500 mt-6 md:hidden">
+            Don't have an account?{' '}
+            <Link to="/register" className="font-bold text-gray-900 underline">Sign up</Link>
+          </p>
+        </form>
       </div>
     </div>
   );
-}
+};
