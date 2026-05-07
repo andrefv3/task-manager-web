@@ -2,12 +2,10 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "composite": true,
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "types": ["vitest/globals", "@testing-library/jest-dom", "vite/client"]
+    "moduleDetection": "force",
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "allowImportingTsExtensions": true 
   },
-  "include": [
-    "src/**/*.test.ts", 
-    "src/**/*.test.tsx", 
-    "src/tests/setup.ts"
-  ]
+  "include": ["src"], 
+  "exclude": ["node_modules", "dist"]
 }

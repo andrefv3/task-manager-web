@@ -7,8 +7,19 @@ export const DashboardHeader = () => {
   return (
     <div className="flex items-center justify-between w-full animate-fade-in">
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
-            <span className="text-slate-600 font-bold">{user?.name[0]}{user?.lastName[0]}</span>
+        <div className="w-14 h-14 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+          {user?.profilePicture ? (
+            <img 
+              src={user.profilePicture} 
+              alt={user.name} 
+              draggable={false}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-slate-600 font-bold text-xl uppercase">
+              {user?.name?.[0]}{user?.lastName?.[0]}
+            </span>
+          )}
         </div>
         <div>
           <WelcomeMessage />

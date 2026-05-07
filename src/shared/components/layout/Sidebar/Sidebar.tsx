@@ -90,9 +90,14 @@ export const Sidebar = () => {
           <li className="mt-auto -mx-2 pt-4 border-t border-gray-100">
             <div className="flex items-center gap-x-3 px-2 py-3 mb-2">
               <img
-                className="h-9 w-9 rounded-full bg-gray-50 border border-gray-200"
-                src={`https://ui-avatars.com/api/?name=${user?.name || 'User'}&background=6366f1&color=fff`}
+                className="h-9 w-9 rounded-full bg-gray-50 border border-gray-200 object-cover"
+                src={
+                  user?.profilePicture 
+                    ? user.profilePicture 
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=6366f1&color=fff`
+                }
                 alt="Profile"
+                draggable={false}
               />
               <div className="flex flex-col min-w-0">
                 <span className="text-sm font-semibold text-gray-900 truncate">
