@@ -4,7 +4,14 @@ import { Link } from 'react-router-dom';
 
 export const LoginPage = () => {
   // We destructure everything we need from the hook
-  const { values, errors, isSubmitting, handleLogin, handleChange } = useLoginForm();
+  const { 
+    values, 
+    errors, 
+    isSubmitting, 
+    handleLogin, 
+    handleChange, 
+    handleGoogleLogin 
+  } = useLoginForm();
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-white overflow-hidden p-6">
@@ -87,7 +94,7 @@ export const LoginPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <button type="button" className="cursor-pointer hover:scale-110 transition-transform p-2">
+            <button type="button" onClick={() => handleGoogleLogin()} className="cursor-pointer hover:scale-110 transition-transform p-2">
               <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" className="w-6 h-6" alt="Google" />
             </button>
           </div>

@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { z } from 'zod';
 import { useAuth } from './useAuth';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is mandatory').email('Invalid format'),
@@ -16,7 +17,7 @@ type LoginFormErrors = {
 } & { global?: string };
 
 export const useLoginForm = () => {
-  const { login } = useAuth();
+  const { login, handleGoogleAccess } = useAuth();
   const [values, setValues] = useState<LoginFormValues>({ email: '', password: '' });
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,5 +55,13 @@ export const useLoginForm = () => {
     }
   };
 
-  return { values, errors, isSubmitting, handleLogin, handleChange };
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      // Enviamos el token al proceso de autenticación de nuestra app
+      handleGoogleAccess(tokenResponse);
+    },
+    onError: (error) => console.error('Google Login Error:', error),
+  });
+
+  return { values, errors, isSubmitting, handleLogin, handleChange, handleGoogleLogin };
 };

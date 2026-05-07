@@ -3,7 +3,7 @@ import { Button, Input, Tooltip } from '@/shared/components/ui';
 import { useRegisterForm } from '../hooks/useRegisterForm';
 
 export const RegisterPage = () => {
-  const { errors, isSubmitting, handleRegister } = useRegisterForm();
+  const { errors, isSubmitting, handleRegister, handleGoogleRegister } = useRegisterForm();
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center bg-white overflow-hidden p-6">
@@ -34,7 +34,7 @@ export const RegisterPage = () => {
           </div>
 
           <Tooltip text="Sign Up with Google">       
-            <button type="button" className="cursor-pointer p-3 border border-gray-100 rounded-2xl hover:bg-white transition-all shadow-sm active:scale-95">
+            <button type="button" onClick={() => handleGoogleRegister()} className="cursor-pointer p-3 border border-gray-100 rounded-2xl hover:bg-white transition-all shadow-sm active:scale-95">
               <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" className="w-5 h-5" alt="Google" />
             </button>
           </Tooltip>

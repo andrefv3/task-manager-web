@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import axios from 'axios';
 import { useAuth } from './useAuth';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -32,7 +33,7 @@ type RegisterErrors = Partial<Record<keyof z.infer<typeof registerSchema> | 'glo
 
 export const useRegisterForm = () => {
     const navigate = useNavigate();
-    const { register, login } = useAuth();
+    const { register, login, handleGoogleAccess } = useAuth();
 
     // useActionState from React 19:
     // Return: [state_error, action_for_the_form, is_submitting]
@@ -82,9 +83,18 @@ export const useRegisterForm = () => {
         });
     };
 
+    const handleGoogleRegister = useGoogleLogin({
+        onSuccess: (tokenResponse) => {
+            // Enviamos el token al proceso de autenticación de nuestra app
+            handleGoogleAccess(tokenResponse);
+        },
+        onError: (error) => console.error('Google Login Error:', error),
+    });
+
     return { 
         errors: errors as Record<string, string>, 
         isSubmitting, 
-        handleRegister 
+        handleRegister,
+        handleGoogleRegister
     };
 };
