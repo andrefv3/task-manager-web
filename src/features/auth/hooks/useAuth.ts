@@ -6,29 +6,26 @@ import { authService } from '../api/auth.service';
 export const useAuth = () => {
   const navigate = useNavigate();
   
-  // We extract state and actions separately (Zustand optimization)
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const { login, logout } = useAuthStore((s) => s.actions);
+  const { login: setLoginState, logout: setLogoutState } = useAuthStore((s) => s.actions);
 
   const handleLogin = async (credentials: LoginCredentials) => {
     const data = await authService.login(credentials);
-    
-    // 1. Update the state with the logged-in user and token
-    login(data.user, data.access_token);
-    
-    // 2. Navigate to the dashboard
+    setLoginState(data.user, data.access_token);
     navigate('/', { replace: true });
   };
 
   const handleRegister = async (credentials: RegisterCredentials) => {
     const data = await authService.register(credentials);
-    login(data.user, data.access_token);
+    setLoginState(data.user, data.access_token);
     navigate('/', { replace: true });
   };
 
   const handleLogout = () => {
-    logout();
+    setLogoutState();
+    
+    // Cleanup for security: redirect and reset navigation stack
     navigate('/login', { replace: true });
   };
 

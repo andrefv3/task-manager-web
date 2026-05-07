@@ -4,57 +4,51 @@ import { useAuth } from './useAuth';
 import axios from 'axios';
 
 const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, 'The email is mandatory')
-    .email('Invalid email format')
-    .refine((val) => !val.includes('asd@asd'), {
-      message: 'Please enter a valid corporate or personal email',
-    })
-    .refine((val) => {
-      const domain = val.split('@')[1];
-      return domain && domain.includes('.') && domain.split('.').pop()!.length >= 2;
-    }, { message: 'The email domain is incomplete' }),
-  password: z
-    .string()
-    .min(1, 'The password is mandatory')
+  email: z.string().min(1, 'Email is mandatory').email('Invalid format'),
+  password: z.string().min(1, 'Password is mandatory')
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
+// We define the errors with the exact keys of the schema + 'global'
+type LoginFormErrors = {
+  [K in keyof LoginFormValues]?: string;
+} & { global?: string };
+
 export const useLoginForm = () => {
   const { login } = useAuth();
   const [values, setValues] = useState<LoginFormValues>({ email: '', password: '' });
-  const [errors, setErrors] = useState<Partial<Record<keyof LoginFormValues, string>>>({});
+  const [errors, setErrors] = useState<LoginFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (field: keyof LoginFormValues) => (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (field: keyof LoginFormValues) => (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setValues(prev => ({ ...prev, [field]: e.target.value }));
-    // Limpieza de error optimista: solo si el usuario empieza a corregir
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+    if (errors[field] || errors.global) {
+      setErrors(prev => ({ ...prev, [field]: undefined, global: undefined }));
+    }
   };
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Validation with Zod
     const result = loginSchema.safeParse(values);
     
     if (!result.success) {
-      const formattedErrors = result.error.flatten().fieldErrors;
-      setErrors({
-        email: formattedErrors.email?.[0],
-        password: formattedErrors.password?.[0],
+      const fieldErrors: LoginFormErrors = {};
+      result.error.issues.forEach((err) => {
+        const path = err.path[0] as keyof LoginFormValues;
+        fieldErrors[path] = err.message;
       });
-      return;
+      return setErrors(fieldErrors);
     }
 
     setIsSubmitting(true);
     try {
-      await login(values);
+      await login(result.data);
     } catch (err) {
-      const message = axios.isAxiosError(err) ? err.response?.data?.message : 'Network error';
-      setErrors({ password: message || 'Unauthorized credentials' });
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : 'Credentials error';
+      setErrors({ global: message });
     } finally {
       setIsSubmitting(false);
     }

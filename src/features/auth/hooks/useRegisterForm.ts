@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useActionState, startTransition } from 'react';
+import type { RegisterCredentials } from '@/shared/types';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import axios from 'axios';
 import { useAuth } from './useAuth';
-import type { RegisterCredentials } from '@/shared/types/auth';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const registerSchema = z.object({
   name: z.string().min(2, 'How should we call you? We need at least 2 characters'),
+  lastName: z.string().optional(), 
   email: z.string()
     .min(1, 'Email is required')
     .regex(EMAIL_REGEX, 'Please enter a valid email address')
@@ -27,54 +28,63 @@ const registerSchema = z.object({
   path: ["confirmPassword"], 
 });
 
+type RegisterErrors = Partial<Record<keyof z.infer<typeof registerSchema> | 'global', string>>;
+
 export const useRegisterForm = () => {
-    const [values, setValues] = useState<RegisterCredentials>({
-        name: '',
-        lastName: '',
-        email: '',
-        password: '',
-    });
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
-    const { register, login } = useAuth(); 
+    const { register, login } = useAuth();
 
-    const handleChange = (field: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValues(prev => ({ ...prev, [field]: e.target.value }));
-        if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
-    };
-
-    const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const result = registerSchema.safeParse(values);
-        
-        if (!result.success) {
-            const fieldErrors: Record<string, string> = {};
+    // useActionState from React 19:
+    // Return: [state_error, action_for_the_form, is_submitting]
+    const [errors, formAction, isSubmitting] = useActionState(
+        async (_previousState: RegisterErrors, formData: FormData) => {
+            // We extract the data from FormData natively
+            const rawData = Object.fromEntries(formData);
             
-            const { fieldErrors: flattenedErrors } = result.error.flatten();
+            // 1. Zod Validation
+            const result = registerSchema.safeParse(rawData);
             
-            Object.entries(flattenedErrors).forEach(([field, messages]) => {
-                if (messages && messages.length > 0) {
-                    fieldErrors[field] = messages[0];
-                }
-            });
-            
-            return setErrors(fieldErrors);
-        }
-
-        setIsSubmitting(true);
-        try {
-            await register(values);
-            await login({ email: values.email, password: values.password });
-            navigate('/dashboard', { replace: true });
-        } catch (err) {
-            if (axios.isAxiosError(err) && err.response?.status === 409) {
-                setErrors({ email: 'This email is already registered' });
+            if (!result.success) {
+                const fieldErrors: RegisterErrors = {};
+                result.error.issues.forEach((err) => {
+                    const key = err.path[0];
+                    if (typeof key === 'string') fieldErrors[key as keyof RegisterErrors] = err.message;
+                });
+                return fieldErrors; // This becomes the new value of 'errors'
             }
-        } finally {
-            setIsSubmitting(false);
-        }
+
+            try {
+                // 2. Execute logic (Register) 
+                const values = result.data;
+                await register(values as RegisterCredentials);
+                await login({ email: values.email, password: values.password });
+                
+                navigate('/dashboard', { replace: true });
+                return {}; 
+            } catch (err) {
+                if (axios.isAxiosError(err) && err.response?.status === 409) {
+                    return { email: 'This email is already registered' };
+                }
+                return { global: 'Something went wrong. Please try again.' };
+            }
+        },
+        {} // Initial state for errors (empty object)
+    );
+
+    // Wrapper for managing the form event
+    const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        
+        // startTransition allows the UI to not block during the action
+        startTransition(() => {
+            formAction(formData);
+        });
     };
 
-    return { values, errors, isSubmitting, handleRegister, handleChange };
+    return { 
+        errors: errors as Record<string, string>, 
+        isSubmitting, 
+        handleRegister 
+    };
 };
