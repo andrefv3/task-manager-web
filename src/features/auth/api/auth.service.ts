@@ -8,6 +8,11 @@ export const authService = {
     return data;
   },
 
+  AccessWithGoogle: async (googleToken: string) => {
+    const { data } = await api.post<AuthResponse>(AUTH_ENDPOINTS.GOOGLE_ACCESS, { token: googleToken });
+    return data;
+  },
+
   register: async (credentials: RegisterCredentials) => {
     const { data } = await api.post<AuthResponse>(AUTH_ENDPOINTS.REGISTER, credentials);
     return data;
