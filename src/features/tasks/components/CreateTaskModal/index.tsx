@@ -41,6 +41,8 @@ export const CreateTaskModal = ({ isOpen, onClose }: { isOpen: boolean; onClose:
 
         <Input 
           label="Description"
+          name="description"
+          iconType="description" 
           placeholder="Add some context..."
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
