@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 
 export const useAuth = () => {
   const navigate = useNavigate();
+  const logout = useAuthStore((s) => s.actions.logout);
   
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -25,6 +26,7 @@ export const useAuth = () => {
 
   const handleLogout = () => {
     setLogoutState();
+    logout();
     
     // Cleanup for security: redirect and reset navigation stack
     navigate('/login', { replace: true });
@@ -33,10 +35,10 @@ export const useAuth = () => {
   const handleGoogleAccess = async (tokenResponse: { access_token: string; }) => {
     try {
       const res = await authService.AccessWithGoogle(tokenResponse.access_token);
-      // Guardar en Store (Zustand), poner cookie y redirigir al Dashboard
+      // Save to Store (Zustand), set cookie, and redirect to Dashboard
       setLoginState(res.user, res.access_token);
       navigate('/dashboard');
-    } catch { // <--- En versiones modernas de TS (4.0+), puedes omitir el (err)
+    } catch { 
       toast.error("Error al conectar con Google");
     }
   };
