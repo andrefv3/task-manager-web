@@ -31,42 +31,42 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
 
   if (!isOpen) return null;
 
-  // 3. The Portal: Renders outside the main DOM tree
   return createPortal(
     <div 
-      className="fixed inset-0 z-999 flex items-center justify-center p-4"
+      className="fixed inset-0 z-999 flex items-center justify-center p-4 sm:p-6"
       role="dialog"
       aria-modal="true"
     >
+      {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity" 
+        className="absolute inset-0 bg-slate-500/20 backdrop-blur-md transition-opacity" 
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Container with scale and deep shadow */}
-      <div className="relative bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      {/* Modal Container */}
+      <div className="relative bg-white border border-slate-200 w-full max-w-lg rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden animate-in fade-in zoom-in duration-200">
         
-        {/* Header with gradient */}
-        <div className="flex items-center justify-between p-6 border-b border-white/5 bg-white/2">
-          <h3 className="text-xl font-semibold text-white tracking-tight">
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-slate-50/50">
+          <h3 className="text-lg font-semibold text-slate-900 tracking-tight">
             {title}
           </h3>
           <button 
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white transition-all"
+            className="cursor-pointer p-2 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
             aria-label="Close modal"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="p-6 text-slate-300">
+        {/* Body: */}
+        <div className="p-6 text-slate-600">
           {children}
         </div>
       </div>
     </div>,
-    document.body // Here's where the portal "magic" happens
+    document.body
   );
 };

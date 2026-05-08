@@ -7,8 +7,10 @@ import {
   Plus
 } from 'lucide-react';
 import { SidebarItem } from './SidebarItem';
-import { useAuthStore } from '@/features/auth/store/authStore'; 
+import { useAuth, useAuthStore } from '@/features/auth/'; 
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { CreateTaskModal } from '@/features/tasks/';
 
 const mainNavigation = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
@@ -21,15 +23,14 @@ const secondaryNavigation = [
 ];
 
 export const Sidebar = () => {
-  const logout = useAuthStore((state) => state.actions.logout);
+  const { logout } = useAuth();
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <aside className="flex flex-col h-full bg-white px-6 pb-6 ">
@@ -40,13 +41,19 @@ export const Sidebar = () => {
       
       <div className="mb-8">
         <button 
-          onClick={() => console.log('Open Modal')} // Modal
+          onClick={openModal} // Modal
           className="group w-full flex items-center justify-center gap-x-2 cursor-pointer rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 transition-all active:scale-95"
         >
           <Plus className="h-5 w-5" />
           <span>New Task</span>
         </button>
       </div>
+
+      {/* Modal */}
+      <CreateTaskModal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
 
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="flex flex-1 flex-col gap-y-8">
@@ -108,7 +115,7 @@ export const Sidebar = () => {
             </div>
             
             <button
-              onClick={handleLogout}
+              onClick={logout}
               className="group w-full flex cursor-pointer gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-red-600 hover:bg-red-50 transition-colors"
             >
               <LogOut className="h-6 w-6 shrink-0 text-red-400 group-hover:text-red-600" />
